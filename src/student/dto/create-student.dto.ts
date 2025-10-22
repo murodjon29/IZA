@@ -3,7 +3,5 @@ export class CreateStudentDto {
     surname: string;
     birthYear: number;
     phoneNumber: string;
-    email: string;
-    password: string;
     groupId: number
 }
