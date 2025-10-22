@@ -17,31 +17,42 @@ import { RolesGuard } from 'src/helpers/guard/roles.guard';
 import { JwtGuard } from 'src/helpers/guard/jwt-auth.guard';
 
 @Controller('student')
-@UseGuards(JwtGuard, RolesGuard)
-@Roles(ROLE.ADMIN, ROLE.SUPERADMIN)
 export class StudentController {
   constructor(private readonly studentService: StudentService) {}
-
+  
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(ROLE.ADMIN, ROLE.SUPERADMIN)
   @Post()
   create(@Body() createStudentDto: CreateStudentDto) {
     return this.studentService.create(createStudentDto);
   }
 
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(ROLE.ADMIN, ROLE.SUPERADMIN, ROLE.TEACHER)
   @Get()
   findAll() {
     return this.studentService.findAll();
   }
 
+  
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(ROLE.ADMIN, ROLE.SUPERADMIN, ROLE.TEACHER)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.studentService.findOne(+id);
   }
 
+  
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(ROLE.ADMIN, ROLE.SUPERADMIN)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateStudentDto: UpdateStudentDto) {
     return this.studentService.update(+id, updateStudentDto);
   }
 
+  
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(ROLE.ADMIN, ROLE.SUPERADMIN)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.studentService.remove(+id);

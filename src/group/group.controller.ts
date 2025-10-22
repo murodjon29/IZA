@@ -17,31 +17,43 @@ import { RolesGuard } from 'src/helpers/guard/roles.guard';
 import { JwtGuard } from 'src/helpers/guard/jwt-auth.guard';
 
 @Controller('group')
-@UseGuards(JwtGuard, RolesGuard)
-@Roles(ROLE.ADMIN, ROLE.SUPERADMIN)
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(ROLE.ADMIN, ROLE.SUPERADMIN)
   @Post()
   create(@Body() createGroupDto: CreateGroupDto) {
     return this.groupService.create(createGroupDto);
   }
 
+  
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(ROLE.ADMIN, ROLE.SUPERADMIN)
   @Get()
   findAll() {
     return this.groupService.findAll();
   }
 
+  
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(ROLE.ADMIN, ROLE.SUPERADMIN, ROLE.TEACHER)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.groupService.findOne(+id);
   }
 
+  
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(ROLE.ADMIN, ROLE.SUPERADMIN)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateGroupDto: UpdateGroupDto) {
     return this.groupService.update(+id, updateGroupDto);
   }
 
+  
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(ROLE.ADMIN, ROLE.SUPERADMIN)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.groupService.remove(+id);
