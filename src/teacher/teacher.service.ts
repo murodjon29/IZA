@@ -11,6 +11,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import config from 'src/config';
+import { ROLE } from 'src/helpers/enum';
 
 @Injectable()
 export class TeacherService {
@@ -20,7 +21,6 @@ export class TeacherService {
     private readonly jwtService: JwtService,
   ) {}
 
-  // 🟢 Ro‘yxatdan o‘tish
   async register(createTeacherDto: CreateTeacherDto, res: Response) {
     try {
       const existing = await this.teacherRepository.findOne({
@@ -32,6 +32,7 @@ export class TeacherService {
 
       const hashedPassword = await bcrypt.hash(createTeacherDto.password, 10);
       const teacher = this.teacherRepository.create({
+        role: ROLE.TEACHER,
         ...createTeacherDto,
         password: hashedPassword,
       });
@@ -55,7 +56,6 @@ export class TeacherService {
     }
   }
 
-  // 🟡 Login
   async login(login: string, password: string, res: Response) {
     const teacher = await this.teacherRepository.findOne({ where: { login } });
     if (!teacher) throw new UnauthorizedException('❌ Login yoki parol noto‘g‘ri');
@@ -78,7 +78,6 @@ export class TeacherService {
     };
   }
 
-  // ♻️ Tokenni yangilash
   async refreshToken(res: Response, oldRefreshToken: string) {
     try {
       const payload = this.jwtService.verify(oldRefreshToken, {
@@ -108,7 +107,6 @@ export class TeacherService {
     }
   }
 
-  // 🔐 Token yaratish helper
   private async generateTokens(id: number, login: string, role: string) {
     const access_token = await this.jwtService.signAsync(
       { id, login, role },
@@ -122,7 +120,6 @@ export class TeacherService {
     return { access_token, refresh_token };
   }
 
-  // 🧾 CRUD
   async findAll() {
     const teachers = await this.teacherRepository.find();
     return { status_code: 200, data: teachers };
