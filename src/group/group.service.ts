@@ -38,7 +38,7 @@ export class GroupService {
   }
 
   async update(id: number, updateGroupDto: UpdateGroupDto) {
-    const group = await this.groupRepository.findOne({ where: { id } });
+    const group = await this.groupRepository.findOne({ where: { id }, relations: ['teacher', 'students'] });
     if (!group) return { status_code: 404, message: '❌ Group not found' };
     if (updateGroupDto.teacherId) {
       const teacher = await this.teacherRepository.findOneBy({ id: updateGroupDto.teacherId });
