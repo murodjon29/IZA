@@ -121,12 +121,12 @@ export class TeacherService {
   }
 
   async findAll() {
-    const teachers = await this.teacherRepository.find();
+    const teachers = await this.teacherRepository.find({relations: ['lessons', 'groups']});
     return { status_code: 200, data: teachers };
   }
 
   async findOne(id: number) {
-    const teacher = await this.teacherRepository.findOne({ where: { id } });
+    const teacher = await this.teacherRepository.findOne({ where: { id }, relations: ['lessons', 'groups'] });
     if (!teacher)
       return { status_code: 404, message: '❌ Teacher topilmadi' };
     return { status_code: 200, data: teacher };
